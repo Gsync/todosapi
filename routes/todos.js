@@ -33,4 +33,24 @@ router.get("/:todoId", function(req, res) {
         });
 });
 
+router.put("/:todoId", function(req, res) {
+    db.Todo.findOneAndUpdate({_id: req.params.todoId}, req.body, {new: true})//new: true respods with the new update
+        .then(function(todo) {
+            res.json(todo);
+        })
+        .catch(function(err) {
+            res.send(err);
+        });
+});
+
+router.delete("/:todoId", function(req, res) {
+    db.Todo.remove({_id: req.params.todoId})
+        .then(function(todo) {
+            res.send("Record deleted!!!");
+        })
+        .catch(function(err) {
+            res.send(err);
+        });
+});
+
 module.exports = router;
