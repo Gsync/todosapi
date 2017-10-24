@@ -6,6 +6,10 @@ $(document).ready(function() {
         if (event.which == 13) //if keypress "Enter" keycode = 13
             createTodo();
     });
+
+    $(".list").on("click", "span", function() {
+       removeTodo($(this).parent());
+    });
 });
 
 function addTodos(todos) {
@@ -16,7 +20,8 @@ function addTodos(todos) {
 }
 
 function addTodo(todo) {
-    var Todo = $("<li class='task'>" + todo.name + "</li>");
+    var Todo = $("<li class='task'>" + todo.name + "<span>Delete</span></li>");
+    Todo.data("id", todo._id); //assign id to the variable based on li
     if (todo.completed) {
         Todo.addClass("done");
     }
@@ -35,4 +40,16 @@ function createTodo() {
         .catch(function(err) {
             console.log(err);
         })
+}
+
+function removeTodo(todo) {
+    var clickId = todo.data("id");
+    var delUrl = "/api/todos/" + clickId;
+    $.ajax({
+        method: "Delete",
+        url: delUrl
+    })
+    .then(function(data) {
+        todo.remove();
+    })
 }
