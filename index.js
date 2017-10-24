@@ -7,9 +7,11 @@ var todoRoutes = require("./routes/todos");
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(express.static(__dirname + "/views"));
+app.use(express.static(__dirname + "/public"));
 
 app.get("/", function(req, res) {
-    res.send("Response from express");
+    res.sendFile("index.html");
 });
 
 app.use("/api/todos", todoRoutes); // sets the root route "/api/todos" === "/" defined in todos.js routes folder
