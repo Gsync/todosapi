@@ -7,7 +7,12 @@ $(document).ready(function() {
             createTodo();
     });
 
-    $(".list").on("click", "span", function() {
+    $(".list").on("click", "li", function() {
+        updateTodo($(this));
+    });
+
+    $(".list").on("click", "span", function(e) {
+        e.stopPropagation(); //stops the event to trigger parent li event
        removeTodo($(this).parent());
     });
 });
@@ -21,7 +26,8 @@ function addTodos(todos) {
 
 function addTodo(todo) {
     var Todo = $("<li class='task'>" + todo.name + "<span>Delete</span></li>");
-    Todo.data("id", todo._id); //assign id to the variable based on li
+    Todo.data("id", todo._id); //assign id = _id to the variable based on li
+    Todo.data("completed", todo.completed); //assign completed = true/false to the variable based on li
     if (todo.completed) {
         Todo.addClass("done");
     }
@@ -51,5 +57,20 @@ function removeTodo(todo) {
     })
     .then(function(data) {
         todo.remove();
+    })
+}
+
+function updateTodo(todo) {
+    var updateUrl = "/api/todos/" + todo.data("id");
+    var isCompleted = !todo.data("completed");
+    var updateData = {completed: isCompleted}; //change the completed status to true/false
+    $.ajax({
+        method: "Put",
+        url: updateUrl,
+        data: updateData
+    })
+    .then(function(update) {
+        todo.toggleClass("done"); //toggle css class
+        todo.data("completed", isCompleted);
     })
 }
