@@ -1,6 +1,6 @@
 var express = require('express'),
     app     = express(),
-    port    = process.env.port || 3000,
+    PORT    = process.env.PORT || 3001,
     bodyParser = require('body-parser');
 
 var todoRoutes = require("./routes/todos");
@@ -20,6 +20,6 @@ app.get("/json", function(req, res) {
     res.json({message: "this is json"});
 });
 
-app.listen(port, function() {
-    console.log("App is running on port 3000");
+app.listen(PORT, function() {
+    console.log(`App is running on ${PORT}`);
 });
